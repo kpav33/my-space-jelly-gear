@@ -11,9 +11,10 @@ import products from "@data/products";
 
 import styles from "@styles/Page.module.scss";
 
-export default function Home({ home }) {
+export default function Home({ home, products }) {
   // console.log(home);
   const { heroTitle, heroText, heroLink, heroBackground } = home;
+  console.log("products", products);
 
   return (
     <Layout>
@@ -46,16 +47,16 @@ export default function Home({ home }) {
         <h2 className={styles.heading}>Featured Gear</h2>
 
         <ul className={styles.products}>
-          {products.slice(0, 4).map((product) => {
+          {products.map((product) => {
             return (
-              <li key={product.id}>
+              <li key={product.slug}>
                 <Link href="#">
                   <a>
                     <div className={styles.productImage}>
                       <img
-                        width="500"
-                        height="500"
-                        src={product.image}
+                        width={product.image.width}
+                        height={product.image.height}
+                        src={product.image.url}
                         alt=""
                       />
                     </div>
@@ -97,13 +98,25 @@ export async function getStaticProps() {
           }
           slug
         }
+
+        products(first: 4) {
+          name
+          price
+          slug
+          image {
+            height
+            width
+            url
+          }
+        }
       }
     `,
   });
 
   const home = data.data.page;
+  const products = data.data.products;
 
   return {
-    props: { home },
+    props: { home, products },
   };
 }
