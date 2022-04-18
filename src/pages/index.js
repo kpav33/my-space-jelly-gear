@@ -12,9 +12,7 @@ import products from "@data/products";
 import styles from "@styles/Page.module.scss";
 
 export default function Home({ home, products }) {
-  // console.log(home);
   const { heroTitle, heroText, heroLink, heroBackground } = home;
-  console.log("products", products);
 
   return (
     <Layout>
@@ -91,11 +89,7 @@ export async function getStaticProps() {
           heroTitle
           id
           name
-          heroBackground {
-            height
-            url
-            width
-          }
+          heroBackground
           slug
         }
 
@@ -103,11 +97,7 @@ export async function getStaticProps() {
           name
           price
           slug
-          image {
-            height
-            width
-            url
-          }
+          image
         }
       }
     `,
