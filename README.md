@@ -1,5 +1,7 @@
 # Space Jelly Gear Starter
 
+[https://egghead.io/courses/ecommerce-product-management-storefront-with-graphcms-snipcart-next-js-13cc0534
+](https://egghead.io/courses/ecommerce-product-management-storefront-with-graphcms-snipcart-next-js-13cc0534)
 ## ⚡️ Quick Start
 
 ```bash
