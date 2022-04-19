@@ -7,8 +7,6 @@ import Layout from "@components/Layout";
 import Container from "@components/Container";
 import Button from "@components/Button";
 
-import products from "@data/products";
-
 import styles from "@styles/Page.module.scss";
 
 export default function Home({ home, products }) {
@@ -48,7 +46,7 @@ export default function Home({ home, products }) {
           {products.map((product) => {
             return (
               <li key={product.slug}>
-                <Link href="#">
+                <Link href={`/products/${product.slug}`}>
                   <a>
                     <div className={styles.productImage}>
                       <img
