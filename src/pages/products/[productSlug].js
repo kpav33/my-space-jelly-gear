@@ -57,7 +57,7 @@ export default function Product({ product }) {
   );
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params, locale }) {
   const client = new ApolloClient({
     uri: "https://api-eu-central-1.graphcms.com/v2/cl24uphqf6pu801xtdsd606oa/master",
     cache: new InMemoryCache(),
@@ -65,7 +65,7 @@ export async function getStaticProps({ params }) {
 
   const data = await client.query({
     query: gql`
-      query PageProduct($slug: String) {
+      query PageProduct($slug: String, $locale: Locale!) {
         product(where: { slug: $slug }) {
           id
           image
@@ -75,22 +75,36 @@ export async function getStaticProps({ params }) {
             html
           }
           slug
+          localizations(locales: [$locale]) {
+            description {
+              html
+            }
+            locale
+          }
         }
       }
     `,
     variables: {
       slug: params.productSlug,
+      locale,
     },
   });
 
-  const product = data.data.product;
+  let product = data.data.product;
+
+  if (product.localizations.length > 0) {
+    product = {
+      ...product,
+      ...product.localizations[0],
+    };
+  }
 
   return {
     props: { product },
   };
 }
 
-export async function getStaticPaths() {
+export async function getStaticPaths({ locales }) {
   const client = new ApolloClient({
     uri: "https://api-eu-central-1.graphcms.com/v2/cl24uphqf6pu801xtdsd606oa/master",
     cache: new InMemoryCache(),
@@ -117,8 +131,19 @@ export async function getStaticPaths() {
     };
   });
 
+  // Add static paths for both default (english) and localized routes by using a flatMap
   return {
-    paths,
+    paths: [
+      ...paths,
+      ...paths.flatMap((path) => {
+        return locales.map((locale) => {
+          return {
+            ...path,
+            locale,
+          };
+        });
+      }),
+    ],
     // Add a fallback page, when set as false pages will 404 if not found
     fallback: false,
   };

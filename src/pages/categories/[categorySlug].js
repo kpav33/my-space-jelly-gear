@@ -10,8 +10,6 @@ import Button from "@components/Button";
 import styles from "@styles/Page.module.scss";
 
 export default function Category({ category, products }) {
-  console.log("category", category);
-  console.log("products", products);
   return (
     <Layout>
       <Head>
@@ -100,7 +98,7 @@ export async function getStaticProps({ params }) {
   };
 }
 
-export async function getStaticPaths() {
+export async function getStaticPaths({ locales }) {
   const client = new ApolloClient({
     uri: "https://api-eu-central-1.graphcms.com/v2/cl24uphqf6pu801xtdsd606oa/master",
     cache: new InMemoryCache(),
@@ -125,8 +123,19 @@ export async function getStaticPaths() {
     };
   });
 
+  // Add static paths for both default (english) and localized routes by using a flatMap
   return {
-    paths,
+    paths: [
+      ...paths,
+      ...paths.flatMap((path) => {
+        return locales.map((locale) => {
+          return {
+            ...path,
+            locale,
+          };
+        });
+      }),
+    ],
     // Add a fallback page, when set as false pages will 404 if not found
     fallback: false,
   };

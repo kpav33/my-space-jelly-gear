@@ -84,7 +84,7 @@ export default function Home({ home, products }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getStaticProps({ locale }) {
   const client = new ApolloClient({
     uri: "https://api-eu-central-1.graphcms.com/v2/cl24uphqf6pu801xtdsd606oa/master",
     cache: new InMemoryCache(),
@@ -92,7 +92,7 @@ export async function getStaticProps() {
 
   const data = await client.query({
     query: gql`
-      query PageHome {
+      query PageHome($locale: Locale!) {
         page(where: { slug: "home" }) {
           heroLink
           heroText
@@ -101,6 +101,11 @@ export async function getStaticProps() {
           name
           heroBackground
           slug
+          localizations(locales: [$locale]) {
+            heroText
+            heroTitle
+            locale
+          }
         }
 
         products(where: { categories_some: { slug: "featured" } }) {
@@ -112,9 +117,19 @@ export async function getStaticProps() {
         }
       }
     `,
+    variables: { locale },
   });
 
-  const home = data.data.page;
+  let home = data.data.page;
+
+  // If there are available localized translations, then we first copy over the entire home object (...home) and then we overwrite the heroText and heroTitle fields with localized values by again using the object spread syntax
+  if (home.localizations.length > 0) {
+    home = {
+      ...home,
+      ...home.localizations[0],
+    };
+  }
+
   const products = data.data.products;
 
   return {
