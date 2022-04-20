@@ -3,6 +3,8 @@ import Head from "next/head";
 import Link from "next/link";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
+import { buildImage } from "@lib/cloudinary";
+
 import Layout from "@components/Layout";
 import Container from "@components/Container";
 import Button from "@components/Button";
@@ -24,17 +26,15 @@ export default function Category({ category, products }) {
 
         <ul className={styles.products}>
           {products.map((product) => {
+            const imageUrl = buildImage(product.image.public_id)
+              .resize("w_900,h_900")
+              .toURL();
             return (
               <li key={product.id}>
                 <Link href={`/products/${product.slug}`}>
                   <a>
                     <div className={styles.productImage}>
-                      <img
-                        width={product.image.width}
-                        height={product.image.height}
-                        src={product.image.url}
-                        alt=""
-                      />
+                      <img width="900" height="900" src={imageUrl} alt="" />
                     </div>
                     <h3 className={styles.productTitle}>{product.name}</h3>
                     <p className={styles.productPrice}>

@@ -3,6 +3,8 @@ import Head from "next/head";
 import Link from "next/link";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
+import { buildImage } from "@lib/cloudinary";
+
 import Layout from "@components/Layout";
 import Container from "@components/Container";
 import Button from "@components/Button";
@@ -34,7 +36,7 @@ export default function Home({ home, products }) {
               </div>
               <img
                 className={styles.heroImage}
-                src={heroBackground.url}
+                src={buildImage(heroBackground.public_id).toURL()}
                 height={heroBackground.height}
                 width={heroBackground.width}
                 alt=""
@@ -47,6 +49,9 @@ export default function Home({ home, products }) {
 
         <ul className={styles.products}>
           {products.map((product) => {
+            const imageUrl = buildImage(product.image.public_id)
+              .resize("w_900,h_900")
+              .toURL();
             return (
               <li key={product.slug}>
                 <Link href={`/products/${product.slug}`}>
@@ -55,7 +60,7 @@ export default function Home({ home, products }) {
                       <img
                         width={product.image.width}
                         height={product.image.height}
-                        src={product.image.url}
+                        src={imageUrl}
                         alt=""
                       />
                     </div>
