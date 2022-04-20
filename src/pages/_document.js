@@ -21,7 +21,7 @@ export default function Document() {
         <div
           hidden
           id="snipcart"
-          data-api-key="YjVmMTY1NmMtM2ExYi00OGFhLWFjNjAtMjI0MDM1YmNiODljNjM3ODU5NTc5OTIzMDQ3ODIx"
+          data-api-key={process.env.NEXT_PUBLIC_SNIPCART_API_KEY}
           data-config-modal-style="side"
         ></div>
       </body>
