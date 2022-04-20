@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
@@ -11,6 +12,9 @@ import Map from "@components/Map";
 import styles from "@styles/Page.module.scss";
 
 export default function Stores({ storeLocations }) {
+  // Track selected active store on map
+  const [activeStore, setActiveStore] = useState();
+
   const features = points(
     storeLocations.map(({ location }) => {
       return [location.latitude, location.longitude];
@@ -34,13 +38,18 @@ export default function Stores({ storeLocations }) {
           <div className={styles.storesLocations}>
             <ul className={styles.locations}>
               {storeLocations.map((location) => {
+                // Store users store selection into state
+                function handleOnClick() {
+                  setActiveStore(location.id);
+                }
+
                 return (
                   <li key={location.id}>
                     <p className={styles.locationName}>{location.name}</p>
                     <address>{location.address}</address>
                     <p>{location.phoneNumber}</p>
                     <p className={styles.locationDiscovery}>
-                      <button>View on Map</button>
+                      <button onClick={handleOnClick}>View on Map</button>
                       <a
                         href={`https://www.google.com/maps/dir//${location.location.latitude},${location.location.longitude}/@${location.location.latitude},${location.location.longitude},14z/`}
                         target="_blank"
@@ -65,8 +74,23 @@ export default function Stores({ storeLocations }) {
                 scrollWheelZoom={false}
               >
                 {({ TileLayer, Marker, Popup }, map) => {
+                  // Change the map view to the selected store location
+                  // Had to create an empty react component so that we can access the map information that we get from the parameters
+                  // Inside of the empty MapEffect component we can then use the useEffect hook to find the selected store and display it on the map
+                  const MapEffect = () => {
+                    useEffect(() => {
+                      if (!activeStore) return;
+                      const { location } = storeLocations.find(
+                        ({ id }) => id === activeStore
+                      );
+                      map.setView([location.latitude, location.longitude], 14);
+                      // eslint-disable-next-line react-hooks/exhaustive-deps
+                    }, [activeStore]);
+                    return null;
+                  };
                   return (
                     <>
+                      <MapEffect />
                       <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
