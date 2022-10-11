@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
@@ -17,6 +18,13 @@ export default function Home({ home, products }) {
 
   const { heroTitle, heroText, heroLink, heroBackground } = home;
 
+  // Added to remove React hydration error
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <Layout>
       <Head>
@@ -34,13 +42,15 @@ export default function Home({ home, products }) {
                 <h2>{heroTitle}</h2>
                 <p>{heroText}</p>
               </div>
-              <img
-                className={styles.heroImage}
-                src={buildImage(heroBackground.public_id).toURL()}
-                height={heroBackground.height}
-                width={heroBackground.width}
-                alt=""
-              />
+              {mounted && (
+                <img
+                  className={styles.heroImage}
+                  src={buildImage(heroBackground.public_id).toURL()}
+                  height={heroBackground.height}
+                  width={heroBackground.width}
+                  alt=""
+                />
+              )}
             </a>
           </Link>
         </div>
@@ -57,12 +67,14 @@ export default function Home({ home, products }) {
                 <Link href={`/products/${product.slug}`}>
                   <a>
                     <div className={styles.productImage}>
-                      <img
-                        width={product.image.width}
-                        height={product.image.height}
-                        src={imageUrl}
-                        alt=""
-                      />
+                      {mounted && (
+                        <img
+                          width={product.image.width}
+                          height={product.image.height}
+                          src={imageUrl}
+                          alt=""
+                        />
+                      )}
                     </div>
                     <h3 className={styles.productTitle}>{product.name}</h3>
                     <p className={styles.productPrice}>${product.price}</p>
