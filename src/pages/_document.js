@@ -19,12 +19,16 @@ export default function Document() {
         <script
           async
           src="https://cdn.snipcart.com/themes/v3.3.3/default/snipcart.js"
+          // This doesn't work use data-config-add-product-behavior
+          // data-autopop="false"
         ></script>
         <div
           hidden
           id="snipcart"
           data-api-key={process.env.NEXT_PUBLIC_SNIPCART_API_KEY}
           data-config-modal-style="side"
+          // Don't open cart when user clicks on add to cart button
+          data-config-add-product-behavior="none"
         ></div>
       </body>
     </Html>
