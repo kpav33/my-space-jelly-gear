@@ -17,6 +17,9 @@ export default function Home({ home, products }) {
   // Not added, because it requires adding some additional information, before you can even test if it's working
   // https://egghead.io/lessons/snipcart-use-stripe-as-a-payment-gateway-in-snipcart
 
+  // If you get the A 'cart-confirmation' error occured in Snipcart. Reason: 'domain-crawling-failed' error make sure that you set the right domain name in the snipcarts Domains & Urls section of the dashboard
+  // For example for this website the domain is set as my-space-jelly-gear-bay.vercel.app
+
   const { heroTitle, heroText, heroLink, heroBackground } = home;
 
   // Added to remove React hydration error
