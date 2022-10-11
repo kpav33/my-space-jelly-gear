@@ -14,6 +14,7 @@ import styles from "@styles/Page.module.scss";
 
 export default function Home({ home, products }) {
   // The lesson where you integrate Stripe into Snipcart was not completed
+  // Not added, because it requires adding some additional information, before you can even test if it's working
   // https://egghead.io/lessons/snipcart-use-stripe-as-a-payment-gateway-in-snipcart
 
   const { heroTitle, heroText, heroLink, heroBackground } = home;
@@ -81,6 +82,7 @@ export default function Home({ home, products }) {
                   </a>
                 </Link>
                 <p>
+                  {/* Snipcart buy button */}
                   <Button
                     className="snipcart-add-item"
                     data-item-id={product.id}

@@ -6,6 +6,7 @@ export default function Document() {
       <Head>
         <link rel="preconnect" href="https://app.snipcart.com" />
         <link rel="preconnect" href="https://cdn.snipcart.com" />
+        {/* Snipcart styling */}
         <link
           rel="stylesheet"
           href="https://cdn.snipcart.com/themes/v3.3.3/default/snipcart.css"
@@ -14,6 +15,7 @@ export default function Document() {
       <body>
         <Main />
         <NextScript />
+        {/* Add Snipcart script */}
         <script
           async
           src="https://cdn.snipcart.com/themes/v3.3.3/default/snipcart.js"

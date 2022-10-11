@@ -11,6 +11,7 @@ const Header = () => {
   // Get locale values
   const { locale: activeLocale, locales, asPath } = useRouter();
 
+  // Get snipcart cart data
   const { cart = {} } = useSnipcart();
 
   const availableLocales = locales.filter((locale) => locale !== activeLocale);
@@ -41,6 +42,7 @@ const Header = () => {
           </li>
         </ul>
         <p className={styles.headerCart}>
+          {/* Add snipcart-checkout class to open cart on click */}
           <button className="snipcart-checkout">
             <FaShoppingCart />
             <span>${cart.subtotal?.toFixed(2)}</span>
