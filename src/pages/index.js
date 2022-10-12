@@ -20,6 +20,10 @@ export default function Home({ home, products }) {
   // If you get the A 'cart-confirmation' error occured in Snipcart. Reason: 'domain-crawling-failed' error make sure that you set the right domain name in the snipcarts Domains & Urls section of the dashboard
   // For example for this website the domain is set as my-space-jelly-gear-bay.vercel.app
 
+  // Official Snipcart, Next.js example
+  // https://snipcart.com/blog/next-js-ecommerce-tutorial-example
+  // Includes an example on how to create product validation by using JSON validation using Next.js serverless API
+
   const { heroTitle, heroText, heroLink, heroBackground } = home;
 
   // Added to remove React hydration error
